@@ -3,12 +3,14 @@ package com.fc.dtc.cache;
 
 import com.fc.dtc.bean.DisctionaryBean;
 import com.fc.dtc.constant.CacheConstant;
+import com.fc.dtc.exception.LockExitException;
 import com.fc.dtc.exception.TranslateException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author fangyuan
@@ -20,6 +22,9 @@ public class LocalDisctionaryTranslate  extends AbstractDisctionaryTranslate  {
     public   Map<String, Map<String,String>> localCacheData ;
 
     protected Map<String, TreeSet<DisctionaryBean>> localCacheDataType;
+
+    //锁
+    private final AtomicBoolean flag = new AtomicBoolean(true);
 
     public LocalDisctionaryTranslate(JdbcTemplate  jdbcTemplate,DisctionaryJDBCActuator disctionaryJDBCActuator){
 
@@ -42,8 +47,14 @@ public class LocalDisctionaryTranslate  extends AbstractDisctionaryTranslate  {
 
     @Override
     public void dtcRefresh() {
-        //重新执行init
-        super.init();
+
+        if(flag.compareAndSet(true,false)){
+            //重新执行init
+            super.init();
+        }else{
+            throw new LockExitException("字典正常重新缓存中请等待。。。。");
+        }
+
     }
 
     @Override
