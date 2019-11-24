@@ -2,7 +2,9 @@ package com.fc.dtc.utils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
+import com.fc.dtc.bean.DisctionaryBean;
 import com.fc.dtc.bean.TranslateProperties;
 import com.fc.dtc.cache.DisctionaryTranslate;
 import com.fc.dtc.constant.CacheConstant;
@@ -61,19 +63,40 @@ public class DataTransformationUtils {
 		return j;
 	}
 
+
     /**
      *
-     * @param data 需要转译类
-     * @param baseClasses 需要转译类class
-     * @param returnClasses 返回类class
-     * @param <T>
+     * @param cacheKey 缓存key CacheConstant
+     * @param filedKey 需要获取字段
+     *
      * @return
      */
-    public <T> T transformationData(Object data, Class baseClasses,Class<T> returnClasses) {
+    public String get(String cacheKey,String filedKey) {
 
-        return JSONObject.toJavaObject(this.transformationData(data,baseClasses),returnClasses);
+        return dsctionaryTranslate.get(cacheKey,filedKey);
     }
 
+
+    /**
+     *获取字典类型所有数据
+     * @param type
+     * @return
+     */
+    public TreeSet<DisctionaryBean> getDictionaryByType(String type) {
+        return dsctionaryTranslate.getDictionaryByType(type);
+	}
+
+        /**
+         *
+         * @param data 需要转译类
+         * @param baseClasses 需要转译类class
+         * @param returnClasses 返回类class
+         * @param <T>
+         * @return
+         */
+    public <T> T transformationData(Object data, Class baseClasses,Class<T> returnClasses) {
+        return JSONObject.toJavaObject(this.transformationData(data,baseClasses),returnClasses);
+    }
 
     /**
      *
