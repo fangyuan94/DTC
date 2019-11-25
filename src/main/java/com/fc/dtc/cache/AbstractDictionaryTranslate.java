@@ -1,6 +1,6 @@
 package com.fc.dtc.cache;
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 import com.fc.dtc.constant.CacheConstant;
 import com.fc.dtc.exception.TranslateException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,10 +11,10 @@ import java.util.*;
 /**
  * @author fangyuan
  */
-abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
+abstract class AbstractDictionaryTranslate implements DictionaryTranslate {
 
 
-    protected DisctionaryJDBCActuator disctionaryJDBCActuator;
+    protected DictionaryJDBCActuator dictionaryJDBCActuator;
 
 
     protected JdbcTemplate jdbcTemplate;
@@ -26,7 +26,7 @@ abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
     protected Map<String, String> cacheData1 = new HashMap<String, String>(200);
 
     // (dmlb,(dmz,dmmc))
-    protected Map<String, TreeSet<DisctionaryBean>> cacheData3 = new HashMap<String, TreeSet<DisctionaryBean>>(200);
+    protected Map<String, TreeSet<DictionaryBean>> cacheData3 = new HashMap<String, TreeSet<DictionaryBean>>(200);
 
     //构建比较器
     protected Comparator sortComparator = new SortComparator() ;
@@ -37,7 +37,7 @@ abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
     }
 
     @Override
-    public TreeSet<DisctionaryBean> getDictionaryByType(String type) {
+    public TreeSet<DictionaryBean> getDictionaryByType(String type) {
         throw new TranslateException("需实现getDictionaryByType方法");
     }
 
@@ -46,10 +46,10 @@ abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
         throw new TranslateException("需实现init方法");
     }
 
-    static class SortComparator implements Comparator<DisctionaryBean>,Serializable{
+    static class SortComparator implements Comparator<DictionaryBean>,Serializable{
 
         @Override
-        public int compare(DisctionaryBean d1, DisctionaryBean d2) {
+        public int compare(DictionaryBean d1, DictionaryBean d2) {
 
             String order1 = d1.getItemOrder();
 
@@ -67,7 +67,7 @@ abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
     public final void init(){
 
         //将数据写入缓存中
-        List<DisctionaryBean> dbs = this.disctionaryJDBCActuator.execute(this.jdbcTemplate);
+        List<DictionaryBean> dbs = this.dictionaryJDBCActuator.execute(this.jdbcTemplate);
 
         dbs.forEach(disctionaryBean->{
             String type = disctionaryBean.getType();
@@ -77,7 +77,7 @@ abstract class AbstractDisctionaryTranslate  implements DisctionaryTranslate {
             cacheData.put(type + CacheConstant.SEPARATOR + code, name);
             cacheData1.put(type + CacheConstant.SEPARATOR + name, code);
 
-            TreeSet<DisctionaryBean> ts;
+            TreeSet<DictionaryBean> ts;
 
             if (!cacheData3.containsKey(type)) {
                 //构建有序list

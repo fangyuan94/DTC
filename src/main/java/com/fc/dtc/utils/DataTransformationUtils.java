@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 import com.fc.dtc.bean.TranslateProperties;
-import com.fc.dtc.cache.DisctionaryTranslate;
+import com.fc.dtc.cache.DictionaryTranslate;
 import com.fc.dtc.constant.CacheConstant;
 import com.fc.dtc.constant.TranslateConstant;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class DataTransformationUtils {
 	private Map<String, List<TranslateProperties>> translateProperties;
 
 
-	private DisctionaryTranslate dsctionaryTranslate;
+	private DictionaryTranslate dsctionaryTranslate;
 
     /**
      * 转译代码
@@ -82,7 +82,7 @@ public class DataTransformationUtils {
      * @param type
      * @return
      */
-    public TreeSet<DisctionaryBean> getDictionaryByType(String type) {
+    public TreeSet<DictionaryBean> getDictionaryByType(String type) {
         return dsctionaryTranslate.getDictionaryByType(type);
 	}
 

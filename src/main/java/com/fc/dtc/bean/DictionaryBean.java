@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DisctionaryBean implements Serializable {
+public class DictionaryBean implements Serializable {
 
     private static final long serialVersionUID = 1480820276212818247L;
 

@@ -2,15 +2,14 @@ package com.fc.dtc.config;
 
 
 import com.fc.dtc.bean.TranslateProperties;
-import com.fc.dtc.cache.DisctionaryJDBCActuator;
-import com.fc.dtc.cache.DisctionaryTranslate;
-import com.fc.dtc.cache.LocalDisctionaryTranslate;
-import com.fc.dtc.cache.RedisDisctionaryTranslate;
+import com.fc.dtc.cache.DictionaryJDBCActuator;
+import com.fc.dtc.cache.DictionaryTranslate;
+import com.fc.dtc.cache.LocalDictionaryTranslate;
+import com.fc.dtc.cache.RedisDictionaryTranslate;
 import com.fc.dtc.endPoint.RefreshDTCEndpoint;
 import com.fc.dtc.properties.DTCProperties;
 import com.fc.dtc.utils.DataTransformationUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,8 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.hash.ObjectHashMapper;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -51,7 +48,7 @@ public class DTCAutoConfigure {
      */
     @Configuration
     @ConditionalOnClass(RedisTemplate.class)
-    @ConditionalOnMissingBean(DisctionaryTranslate.class)
+    @ConditionalOnMissingBean(DictionaryTranslate.class)
 //    @ConditionalOnBean(DisctionaryJDBCActuator.class)
     @ConditionalOnProperty(prefix = DTCAutoConfigure.PREFIX, name = "type", havingValue = "redis")
     public static class RedisConfiguration {
@@ -89,9 +86,9 @@ public class DTCAutoConfigure {
          * @return
          */
         @Bean("disctionaryTranslate")
-        public DisctionaryTranslate redisDisctionaryTranslate(RedisTemplate dtcRedisTemplate, JdbcTemplate jdbcTemplate,DisctionaryJDBCActuator disctionaryJDBCActuator){
+        public DictionaryTranslate redisDisctionaryTranslate(RedisTemplate dtcRedisTemplate, JdbcTemplate jdbcTemplate, DictionaryJDBCActuator dictionaryJDBCActuator){
 
-            return new RedisDisctionaryTranslate(dtcRedisTemplate,jdbcTemplate,disctionaryJDBCActuator);
+            return new RedisDictionaryTranslate(dtcRedisTemplate,jdbcTemplate, dictionaryJDBCActuator);
         }
     }
 
@@ -99,7 +96,7 @@ public class DTCAutoConfigure {
      * 本地local
      */
     @Configuration
-    @ConditionalOnMissingBean(DisctionaryTranslate.class)
+    @ConditionalOnMissingBean(DictionaryTranslate.class)
 //    @ConditionalOnBean(DisctionaryJDBCActuator.class)
     @ConditionalOnProperty(prefix = DTCAutoConfigure.PREFIX, name = "type", havingValue = "local")
     public static class LocalConfiguration {
@@ -107,13 +104,13 @@ public class DTCAutoConfigure {
         /**
          *
          * @param jdbcTemplate
-         * @param disctionaryJDBCActuator
+         * @param dictionaryJDBCActuator
          * @return
          */
         @Bean("disctionaryTranslate")
-        public DisctionaryTranslate localDisctionaryTranslate(JdbcTemplate jdbcTemplate,DisctionaryJDBCActuator disctionaryJDBCActuator){
+        public DictionaryTranslate localDisctionaryTranslate(JdbcTemplate jdbcTemplate, DictionaryJDBCActuator dictionaryJDBCActuator){
 
-            return new LocalDisctionaryTranslate(jdbcTemplate,disctionaryJDBCActuator);
+            return new LocalDictionaryTranslate(jdbcTemplate, dictionaryJDBCActuator);
         }
 
     }
@@ -124,7 +121,7 @@ public class DTCAutoConfigure {
      * @return
      */
     @Bean("dataTransformationUtils")
-    public DataTransformationUtils dataTransformationUtils(@Qualifier("translateProperties") Map<String, List<TranslateProperties>> translateProperties, DisctionaryTranslate dsctionaryTranslate){
+    public DataTransformationUtils dataTransformationUtils(@Qualifier("translateProperties") Map<String, List<TranslateProperties>> translateProperties, DictionaryTranslate dsctionaryTranslate){
         return new DataTransformationUtils(translateProperties,dsctionaryTranslate);
     }
 
@@ -135,7 +132,7 @@ public class DTCAutoConfigure {
      * @return
      */
     @Bean
-    public RefreshDTCEndpoint refreshDTCEndpoint( DisctionaryTranslate dsctionaryTranslate){
+    public RefreshDTCEndpoint refreshDTCEndpoint( DictionaryTranslate dsctionaryTranslate){
         return new RefreshDTCEndpoint(dsctionaryTranslate);
     }
 

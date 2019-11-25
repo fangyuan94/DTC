@@ -1,20 +1,19 @@
 package com.fc.dtc.cache;
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 执行从jdbc
  */
-public interface DisctionaryJDBCActuator {
+public interface DictionaryJDBCActuator {
 
     /**
      *
      * @param jdbcTemplate
      */
-    public List<DisctionaryBean> execute(JdbcTemplate jdbcTemplate);
+    public List<DictionaryBean> execute(JdbcTemplate jdbcTemplate);
 
 }

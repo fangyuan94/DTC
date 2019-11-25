@@ -1,6 +1,6 @@
 package com.fc.dtc.cache;
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 import com.fc.dtc.constant.CacheConstant;
 import com.fc.dtc.exception.LockExitException;
 import com.fc.dtc.lock.RedisLock;
@@ -17,17 +17,17 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-public class RedisDisctionaryTranslate extends AbstractDisctionaryTranslate {
+public class RedisDictionaryTranslate extends AbstractDictionaryTranslate {
 
     private RedisTemplate dtcRedisTemplate;
 
     private final static int expireTime = 20;
 
-    public RedisDisctionaryTranslate(RedisTemplate dtcRedisTemplate, JdbcTemplate jdbcTemplate,DisctionaryJDBCActuator disctionaryJDBCActuator){
+    public RedisDictionaryTranslate(RedisTemplate dtcRedisTemplate, JdbcTemplate jdbcTemplate, DictionaryJDBCActuator dictionaryJDBCActuator){
 
         this.dtcRedisTemplate = dtcRedisTemplate;
         this.jdbcTemplate=jdbcTemplate;
-        this.disctionaryJDBCActuator= disctionaryJDBCActuator;
+        this.dictionaryJDBCActuator = dictionaryJDBCActuator;
         super.init();
     }
 
@@ -43,7 +43,7 @@ public class RedisDisctionaryTranslate extends AbstractDisctionaryTranslate {
     }
 
     @Override
-    public TreeSet<DisctionaryBean> getDictionaryByType(String type) {
+    public TreeSet<DictionaryBean> getDictionaryByType(String type) {
 
         Object rs = dtcRedisTemplate.opsForHash().get(CacheConstant.DMLB_DMMC_DMZ,type);
 
@@ -63,11 +63,18 @@ public class RedisDisctionaryTranslate extends AbstractDisctionaryTranslate {
 
         //加入分布式锁保证只有一个请求操作
         if(RedisLock.tryGetDistributedLock(dtcRedisTemplate,lockKey,requestId,expireTime)){
-            super.init();
-            RedisLock.releaseDistributedLock(dtcRedisTemplate,lockKey,requestId);
+            try{
+                super.init();
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                RedisLock.releaseDistributedLock(dtcRedisTemplate,lockKey,requestId);
+            }
+
         }else{
             throw new LockExitException("字典正常重新缓存中请等待。。。。");
         }
+
     }
 
     @Override

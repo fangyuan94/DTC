@@ -1,7 +1,7 @@
 package com.fc.dtc.cache;
 
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 
 import java.util.TreeSet;
 
@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * 字典翻译抽象
  * @author fangyuan
  */
-public  interface DisctionaryTranslate {
+public  interface DictionaryTranslate {
 
 
     /**
@@ -28,7 +28,7 @@ public  interface DisctionaryTranslate {
      * @param type
      * @return
      */
-    public TreeSet<DisctionaryBean> getDictionaryByType(String type);
+    public TreeSet<DictionaryBean> getDictionaryByType(String type);
 
     /**
      * 刷新整个缓存

@@ -1,11 +1,9 @@
 package com.fc.dtc.cache;
 
 
-import com.fc.dtc.bean.DisctionaryBean;
+import com.fc.dtc.bean.DictionaryBean;
 import com.fc.dtc.constant.CacheConstant;
 import com.fc.dtc.exception.LockExitException;
-import com.fc.dtc.exception.TranslateException;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -17,20 +15,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * 本地缓存
  */
 @Getter
-public class LocalDisctionaryTranslate  extends AbstractDisctionaryTranslate  {
+public class LocalDictionaryTranslate extends AbstractDictionaryTranslate {
 
     public   Map<String, Map<String,String>> localCacheData ;
 
-    protected Map<String, TreeSet<DisctionaryBean>> localCacheDataType;
+    protected Map<String, TreeSet<DictionaryBean>> localCacheDataType;
 
     //锁
     private final AtomicBoolean flag = new AtomicBoolean(true);
 
-    public LocalDisctionaryTranslate(JdbcTemplate  jdbcTemplate,DisctionaryJDBCActuator disctionaryJDBCActuator){
+    public LocalDictionaryTranslate(JdbcTemplate  jdbcTemplate, DictionaryJDBCActuator dictionaryJDBCActuator){
 
         this.localCacheData = new HashMap<>();
         this.jdbcTemplate=jdbcTemplate;
-        this.disctionaryJDBCActuator= disctionaryJDBCActuator;
+        this.dictionaryJDBCActuator = dictionaryJDBCActuator;
         super.init();
     }
 
@@ -40,7 +38,7 @@ public class LocalDisctionaryTranslate  extends AbstractDisctionaryTranslate  {
     }
 
     @Override
-    public TreeSet<DisctionaryBean> getDictionaryByType(String type) {
+    public TreeSet<DictionaryBean> getDictionaryByType(String type) {
 
         return localCacheDataType.get(type);
     }

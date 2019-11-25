@@ -1,7 +1,7 @@
 package com.fc.dtc.endPoint;
 
 
-import com.fc.dtc.cache.DisctionaryTranslate;
+import com.fc.dtc.cache.DictionaryTranslate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RefreshDTCEndpoint{
 
-    private DisctionaryTranslate disctionaryTranslate;
+    private DictionaryTranslate disctionaryTranslate;
 
     /**
      * 刷新所有字典
