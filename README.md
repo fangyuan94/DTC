@@ -6,13 +6,4 @@
 
 DTC(Dictionaries Transformation Controller):通过简单配置(注解方式),非嵌入式代码(不想用时可直接关闭)，无感知（对于使用者只需要编写一句调用方法即可）对javaBean对向进行字典翻译(满足嵌套复杂结构，支持字典本地-redis缓存)
 
-配置文件：
-dtc:
-  ###是否使用dtc 字典转换插件 默认为ture
-  enabled: true
-  cache:
-    ### 缓存类型 支持redis与本地
-    type: redis
-    ##后续会添加是否启用自动更新，即数据库中字典的变更会影响本地环境变更
-
-demo项目:
+demo项目地址:https://github.com/fangyuan94/dtcDemo
