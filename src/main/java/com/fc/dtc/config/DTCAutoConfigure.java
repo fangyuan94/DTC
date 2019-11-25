@@ -69,7 +69,6 @@ public class DTCAutoConfigure {
 
             StringRedisSerializer srs = new StringRedisSerializer();
 
-
             // 配置连接工厂
             template.setConnectionFactory(factory);
             template.afterPropertiesSet();
