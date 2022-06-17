@@ -12,7 +12,7 @@
     <properties>
         <commonsLang3.version>3.8.1</commonsLang3.version>
         <reflection.version>0.9.10</reflection.version>
-        <fastjson.version>1.2.47</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
     </properties>
 
     <!--使用spring 2.x-->
