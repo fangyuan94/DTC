@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <commonsLang3.version>3.8.1</commonsLang3.version>
+        <commonsLang3.version>3.18.0</commonsLang3.version>
         <reflection.version>0.9.10</reflection.version>
         <fastjson.version>1.2.47</fastjson.version>
     </properties>
